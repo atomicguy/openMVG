@@ -87,8 +87,6 @@ static bool Generate_SfM_Report
   {
     const View * v = iterV->second.get();
     const IndexT id_view = v->id_view;
-    const IndexT id_intrinsic = v->id_intrinsic;
-    const IndexT id_pose = v->id_pose;
 
     os.str("");
     os << sRowBegin
@@ -98,16 +96,19 @@ static bool Generate_SfM_Report
     // IdView | basename | #Observations | residuals min | residual median | residual max
     if (sfm_data.IsPoseAndIntrinsicDefined(v))
     {
-      const std::vector<double> & residuals = residuals_per_view.at(id_view);
-      if (!residuals.empty())
+      if( residuals_per_view.find(id_view) != residuals_per_view.end() )
       {
-        double min, max, mean, median;
-        minMaxMeanMedian(residuals.begin(), residuals.end(), min, max, mean, median);
-        os << sColBegin << residuals.size()/2 << sColEnd // #observations
-          << sColBegin << min << sColEnd
-          << sColBegin << median << sColEnd
-          << sColBegin << mean << sColEnd
-          << sColBegin << max <<sColEnd;
+        const std::vector<double> & residuals = residuals_per_view.at(id_view);
+        if (!residuals.empty())
+        {
+          double min, max, mean, median;
+          minMaxMeanMedian(residuals.begin(), residuals.end(), min, max, mean, median);
+          os << sColBegin << residuals.size()/2 << sColEnd // #observations
+            << sColBegin << min << sColEnd
+            << sColBegin << median << sColEnd
+            << sColBegin << mean << sColEnd
+            << sColBegin << max <<sColEnd;
+        }
       }
     }
     os << sRowEnd;
@@ -161,7 +162,7 @@ static bool Generate_SfM_Report
       os.str("");
       os << sNewLine<< "Residuals histogram" << sNewLine;
       os << "<img src=\""
-        << stlplus::create_filespec(stlplus::folder_part(htmlFilename), "residuals_histogram", "svg")
+        << "residuals_histogram.svg"
         << "\" height=\"300\" width =\"800\">\n";
       htmlDocStream.pushInfo(os.str());
     }

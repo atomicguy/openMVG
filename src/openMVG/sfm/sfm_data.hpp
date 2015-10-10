@@ -36,10 +36,12 @@ struct SfM_Data
   Views views;
   /// Considered poses (indexed by view.id_pose)
   Poses poses;
-  /// Considered camera intrinsics (indexed by view.id_cam)
+  /// Considered camera intrinsics (indexed by view.id_intrinsic)
   Intrinsics intrinsics;
   /// Structure (3D points with their 2D observations)
   Landmarks structure;
+  /// Controls points (stored as Landmarks (id_feat has no meaning here))
+  Landmarks control_points;
 
   /// Root Views path
   std::string s_root_path;
@@ -51,6 +53,7 @@ struct SfM_Data
   const Poses & GetPoses() const {return poses;}
   const Intrinsics & GetIntrinsics() const {return intrinsics;}
   const Landmarks & GetLandmarks() const {return structure;}
+  const Landmarks & GetControl_Points() const {return control_points;}
 
   /// Check if the View have defined intrinsic and pose
   bool IsPoseAndIntrinsicDefined(const View * view) const
