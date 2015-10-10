@@ -87,8 +87,6 @@ static bool Generate_SfM_Report
   {
     const View * v = iterV->second.get();
     const IndexT id_view = v->id_view;
-    const IndexT id_intrinsic = v->id_intrinsic;
-    const IndexT id_pose = v->id_pose;
 
     os.str("");
     os << sRowBegin
@@ -161,7 +159,7 @@ static bool Generate_SfM_Report
       os.str("");
       os << sNewLine<< "Residuals histogram" << sNewLine;
       os << "<img src=\""
-        << stlplus::create_filespec(stlplus::folder_part(htmlFilename), "residuals_histogram", "svg")
+        << "residuals_histogram.svg"
         << "\" height=\"300\" width =\"800\">\n";
       htmlDocStream.pushInfo(os.str());
     }
